@@ -7,7 +7,6 @@ import {
   cacheLicenseKey,
   getCachedLicenseKey,
 } from "./utils";
-import { getConfig } from "./config";
 import { createCacheStorage } from "./cache";
 
 // Default cache duration in hours
@@ -24,8 +23,7 @@ const cacheStorage = createCacheStorage();
 export async function validateLicense(
   params: ValidateLicenseParams
 ): Promise<ValidateLicenseResponse> {
-  const config = getConfig();
-  const softwareId = params.softwareId || config.softwareId;
+  const softwareId = params.softwareId;
   const licenseKey = params.licenseKey || getCachedLicenseKey(softwareId);
 
   try {
@@ -62,7 +60,7 @@ export async function validateLicense(
               sessionId,
             },
             cacheKey,
-            config.softwareId
+            softwareId
           );
 
           return {
@@ -81,7 +79,7 @@ export async function validateLicense(
         sessionId,
       },
       cacheKey,
-      config.softwareId
+      softwareId
     );
   } catch (error) {
     console.error("Error validating license:", error);
@@ -126,7 +124,7 @@ async function performOnlineValidation(
   }
 
   // Create API client
-  const apiClient = createApiClient({ softwareId });
+  const apiClient = createApiClient();
 
   // The license key is the Authorization header
   const authorization = `Bearer ${params.licenseKey}`;

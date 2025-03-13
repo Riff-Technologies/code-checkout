@@ -1,23 +1,12 @@
 import { generateCheckoutUrl } from "../checkout";
-import { getConfig } from "../config";
 import { createApiClient } from "../api";
+import { DEFAULT_CONFIG } from "../constants";
 
 // Mock the license key generation to make tests deterministic
 jest.mock("../utils", () => ({
   ...jest.requireActual("../utils"),
   generateLicenseKey: jest.fn().mockReturnValue("TEST-LICENSE-KEY"),
 }));
-
-// Mock the config module
-jest.mock("../config", () => {
-  const originalModule = jest.requireActual("../config");
-  return {
-    ...originalModule,
-    getConfig: jest.fn(),
-    configure: jest.fn(),
-    resetConfig: jest.fn(),
-  };
-});
 
 // Mock the API client
 jest.mock("../api", () => ({
@@ -38,11 +27,6 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should throw error if testMode is not set", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
-      softwareId: "test-software",
-    });
-
     await expect(
       // @ts-expect-error: Intentionally missing required property for test
       generateCheckoutUrl({})
@@ -50,18 +34,11 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should call the API and return the checkout URL", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
+    const result = await generateCheckoutUrl({
       softwareId: "test-software",
-      defaultSuccessUrl: "https://test.com/success",
-      defaultCancelUrl: "https://test.com/cancel",
-    });
-
-    const result = await generateCheckoutUrl({ testMode: false });
-
-    // Verify the API client was created with the correct config
-    expect(createApiClient).toHaveBeenCalledWith({
-      softwareId: "test-software",
+      testMode: false,
+      successUrl: "https://test.com/success",
+      cancelUrl: "https://test.com/cancel",
     });
 
     // Get the mocked API client
@@ -85,12 +62,10 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should include testMode parameter when true", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
+    await generateCheckoutUrl({
       softwareId: "test-software",
+      testMode: true,
     });
-
-    await generateCheckoutUrl({ testMode: true });
 
     // Get the mocked API client
     const mockApiClient = (createApiClient as jest.Mock).mock.results[0].value;
@@ -105,17 +80,11 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should use provided URLs over defaults", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
-      softwareId: "test-software",
-      defaultSuccessUrl: "https://default-success.com",
-      defaultCancelUrl: "https://default-cancel.com",
-    });
-
     const customSuccessUrl = "https://custom-success.com";
     const customCancelUrl = "https://custom-cancel.com";
 
     await generateCheckoutUrl({
+      softwareId: "test-software",
       testMode: false,
       successUrl: customSuccessUrl,
       cancelUrl: customCancelUrl,
@@ -135,14 +104,10 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should use provided licenseKey if available", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
-      softwareId: "test-software",
-    });
-
     const customLicenseKey = "CUSTOM-LICENSE-KEY";
 
     await generateCheckoutUrl({
+      softwareId: "test-software",
       testMode: false,
       licenseKey: customLicenseKey,
     });
@@ -160,23 +125,20 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should fall back to local URL construction if API fails", async () => {
-    // Mock getConfig to return a valid configuration
-    (getConfig as jest.Mock).mockReturnValue({
-      softwareId: "test-software",
-      baseUrl: "https://dev-api.riff-tech.com/v1",
-    });
-
     // Mock API client to throw an error
     const mockGet = jest.fn().mockRejectedValue(new Error("API error"));
     (createApiClient as jest.Mock).mockReturnValue({
       get: mockGet,
     });
 
-    const result = await generateCheckoutUrl({ testMode: true });
+    const result = await generateCheckoutUrl({
+      softwareId: "test-software",
+      testMode: true,
+    });
 
     // Verify the result contains a fallback URL
     expect(result.licenseKey).toBe("TEST-LICENSE-KEY");
-    expect(result.url).toContain("https://dev-api.riff-tech.com/v1/checkout");
+    expect(result.url).toContain(DEFAULT_CONFIG.baseUrl);
     expect(result.url).toContain("softwareId=test-software");
     expect(result.url).toContain("licenseKey=TEST-LICENSE-KEY");
     expect(result.url).toContain("testMode=true");

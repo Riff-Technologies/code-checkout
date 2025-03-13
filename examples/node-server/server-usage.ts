@@ -4,7 +4,6 @@
  */
 import express from "express";
 import {
-  configure,
   logAnalyticsEvent,
   validateLicense,
   generateCheckoutUrl,
@@ -33,14 +32,6 @@ class ServerLicenseManager {
   constructor() {
     this.softwareId = "riff-tech.testmystuff";
     this.app = express();
-
-    // Configure the package with server-specific settings
-    configure({
-      softwareId: this.softwareId,
-      baseUrl: "https://dev-api.riff-tech.com/v1",
-      defaultSuccessUrl: "https://example.com/activate",
-      defaultCancelUrl: "https://example.com",
-    });
 
     this.setupMiddleware();
     this.setupRoutes();
@@ -71,6 +62,7 @@ class ServerLicenseManager {
 
       try {
         const result = await validateLicense({
+          softwareId: this.softwareId,
           licenseKey,
           forceOnlineValidation: true,
           environment: {
@@ -104,6 +96,7 @@ class ServerLicenseManager {
       try {
         const licenseKey = generateLicenseKey();
         const { url } = await generateCheckoutUrl({
+          softwareId: this.softwareId,
           testMode: true,
           licenseKey,
           successUrl: `${req.protocol}://${req.get(
@@ -138,6 +131,7 @@ class ServerLicenseManager {
   ): Promise<void> {
     try {
       await logAnalyticsEvent({
+        softwareId: this.softwareId,
         commandId,
         licenseKey,
       });

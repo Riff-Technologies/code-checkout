@@ -6,7 +6,6 @@ import {
   getCurrentTimestamp,
   getCachedLicenseKey,
 } from "./utils";
-import { getConfig } from "./config";
 
 /**
  * Log an analytics event to the CodeCheckout API
@@ -17,8 +16,7 @@ export async function logAnalyticsEvent(
   params: AnalyticsEventParams
 ): Promise<AnalyticsEventResponse> {
   try {
-    const config = getConfig({ softwareId: params.softwareId });
-    const softwareId = params.softwareId || config.softwareId;
+    const softwareId = params.softwareId;
     // Validate required parameters
     if (!softwareId) {
       throw new Error("softwareId is required for analytics events");
@@ -36,10 +34,8 @@ export async function logAnalyticsEvent(
     // Try to get a cached license key if one isn't provided
     const licenseKey = params.licenseKey || getCachedLicenseKey(softwareId);
 
-    // Create API client with the provided softwareId
-    const apiClient = createApiClient({
-      softwareId,
-    });
+    // Create API client
+    const apiClient = createApiClient();
 
     // Make the API request in the background
     const requestPromise = apiClient.post<AnalyticsEventResponse>(

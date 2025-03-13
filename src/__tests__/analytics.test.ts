@@ -32,7 +32,10 @@ describe("Analytics", () => {
 
   test("logAnalyticsEvent should throw error if softwareId is not provided", async () => {
     await expect(
-      logAnalyticsEvent({ commandId: "test.command" })
+      // @ts-expect-error: Intentionally missing required property for test
+      logAnalyticsEvent({
+        commandId: "test.command",
+      })
     ).resolves.toEqual({ success: false });
   });
 
@@ -63,10 +66,6 @@ describe("Analytics", () => {
     };
 
     await logAnalyticsEvent(params);
-
-    expect(createApiClient).toHaveBeenCalledWith({
-      softwareId: params.softwareId,
-    });
 
     const mockApiClient = (createApiClient as jest.Mock).mock.results[0].value;
     expect(mockApiClient.post).toHaveBeenCalledWith(

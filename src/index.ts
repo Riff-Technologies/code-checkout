@@ -4,7 +4,6 @@
  */
 
 // Export public API
-export { configure, getConfig } from "./config";
 export { logAnalyticsEvent } from "./analytics";
 export { validateLicense } from "./license";
 export { generateCheckoutUrl } from "./checkout";

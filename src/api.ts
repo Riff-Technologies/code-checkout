@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { getConfig } from "./config";
 import { CodeCheckoutConfig } from "./types";
+import { DEFAULT_CONFIG } from "./constants";
 
 /**
  * API client for making HTTP requests to the CodeCheckout API
@@ -94,6 +94,6 @@ export class ApiClient {
 export function createApiClient(
   configOverrides?: Partial<CodeCheckoutConfig>
 ): ApiClient {
-  const config = getConfig(configOverrides);
+  const config = { ...DEFAULT_CONFIG, ...configOverrides };
   return new ApiClient(config);
 }

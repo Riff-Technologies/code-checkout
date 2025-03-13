@@ -3,7 +3,6 @@
  * This example demonstrates how to use the package in a client-side web application
  */
 import {
-  configure,
   logAnalyticsEvent,
   validateLicense,
   generateCheckoutUrl,
@@ -27,14 +26,6 @@ class BrowserLicenseManager {
   constructor() {
     this.softwareId = "riff-tech.testmystuff";
     this.licenseStatus = { isValid: false, message: "License not validated" };
-
-    // Configure the package with browser-specific settings
-    configure({
-      softwareId: this.softwareId,
-      baseUrl: "https://dev-api.riff-tech.com/v1",
-      defaultSuccessUrl: `${window.location.origin}/activate`,
-      defaultCancelUrl: window.location.origin,
-    });
   }
 
   /**
@@ -53,6 +44,7 @@ class BrowserLicenseManager {
   private async validateStoredLicense(): Promise<void> {
     try {
       const result = await validateLicense({
+        softwareId: this.softwareId,
         licenseKey: this.licenseKey as string,
         forceOnlineValidation: true,
         environment: {
@@ -88,6 +80,7 @@ class BrowserLicenseManager {
     try {
       const licenseKey = generateLicenseKey();
       const { url } = await generateCheckoutUrl({
+        softwareId: this.softwareId,
         testMode: true,
         licenseKey,
         successUrl: `${window.location.origin}/activate?key=${licenseKey}`,
@@ -111,6 +104,7 @@ class BrowserLicenseManager {
   private async logEvent(commandId: string): Promise<void> {
     try {
       await logAnalyticsEvent({
+        softwareId: this.softwareId,
         commandId,
         licenseKey: this.licenseKey || undefined,
         metadata: {

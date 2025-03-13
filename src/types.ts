@@ -2,14 +2,12 @@
  * Configuration options for the CodeCheckout package
  */
 export interface CodeCheckoutConfig {
-  /** Unique identifier for the software using CodeCheckout */
-  softwareId: string;
   /** Base URL for the CodeCheckout API */
-  baseUrl?: string;
+  baseUrl: string;
   /** Default success URL for checkout redirects */
-  defaultSuccessUrl?: string;
+  defaultSuccessUrl: string;
   /** Default cancel URL for checkout redirects */
-  defaultCancelUrl?: string;
+  defaultCancelUrl: string;
 }
 
 /**
@@ -19,7 +17,7 @@ export interface AnalyticsEventParams {
   /** Identifier for the command or action being tracked */
   commandId: string;
   /** Unique identifier for the software using CodeCheckout */
-  softwareId?: string;
+  softwareId: string;
   /** License key associated with the software */
   licenseKey?: string;
   /** Unique identifier for the machine running the software */
@@ -44,10 +42,10 @@ export interface AnalyticsEventResponse {
  * Parameters for validating a license
  */
 export interface ValidateLicenseParams {
+  /** Unique identifier for the software using CodeCheckout */
+  softwareId: string;
   /** License key to validate */
   licenseKey?: string;
-  /** Unique identifier for the software using CodeCheckout */
-  softwareId?: string;
   /** Unique identifier for the machine running the software */
   machineId?: string;
   /** Unique identifier for the current session */
@@ -75,13 +73,13 @@ export interface ValidateLicenseResponse {
  */
 export interface GenerateCheckoutUrlParams {
   /** Unique identifier for the software using CodeCheckout */
-  softwareId?: string;
+  softwareId: string;
   /** URL to redirect to after successful checkout */
   successUrl?: string;
   /** URL to redirect to if checkout is cancelled */
   cancelUrl?: string;
   /** Whether to use test mode for checkout */
-  testMode: boolean;
+  testMode?: boolean;
   /** Optionally pass in a license key, and if omitted it will be generated */
   licenseKey?: string;
 }

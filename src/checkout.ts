@@ -2,9 +2,9 @@ import {
   GenerateCheckoutUrlParams,
   GenerateCheckoutUrlResponse,
 } from "./types";
-import { getConfig } from "./config";
 import { generateLicenseKey } from "./utils";
 import { createApiClient } from "./api";
+import { DEFAULT_CONFIG } from "./constants";
 
 /**
  * Generate a checkout URL for the CodeCheckout platform
@@ -14,15 +14,8 @@ import { createApiClient } from "./api";
 export async function generateCheckoutUrl(
   params: GenerateCheckoutUrlParams
 ): Promise<GenerateCheckoutUrlResponse> {
-  // Validate testMode is explicitly set
-  if (params.testMode === undefined) {
-    throw new Error(
-      "testMode must be explicitly set for checkout URL generation"
-    );
-  }
-
-  // Get configuration with any overrides
-  const config = getConfig({ softwareId: params.softwareId });
+  // Get configuration
+  const config = DEFAULT_CONFIG;
 
   // Generate a unique license key if not provided
   const licenseKey = params.licenseKey || generateLicenseKey();
@@ -32,7 +25,7 @@ export async function generateCheckoutUrl(
   const cancelUrl = params.cancelUrl || config.defaultCancelUrl;
 
   // Create API client
-  const apiClient = createApiClient({ softwareId: config.softwareId });
+  const apiClient = createApiClient();
 
   // Build query parameters
   const queryParams: Record<string, string | number | boolean> = {
@@ -54,7 +47,7 @@ export async function generateCheckoutUrl(
   // Call the checkout endpoint to get the checkout URL
   try {
     const response = await apiClient.get<{ url: string }>(
-      `/${config.softwareId}/checkout`,
+      `/${params.softwareId}/checkout`,
       queryParams
     );
 
@@ -68,10 +61,9 @@ export async function generateCheckoutUrl(
     // Fallback to constructing the URL locally if the API call fails
     const checkoutPath = "v1/checkout";
 
-    console.log("config", config);
     // Create URL with query parameters
-    const url = new URL(checkoutPath, config.baseUrl!);
-    url.searchParams.append("softwareId", config.softwareId);
+    const url = new URL(checkoutPath, config.baseUrl);
+    url.searchParams.append("softwareId", params.softwareId);
     url.searchParams.append("licenseKey", licenseKey);
 
     if (successUrl) {

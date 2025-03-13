@@ -99,7 +99,10 @@ export function generateMachineId(): string | null {
 
   try {
     // Try to use hardware-specific information if available (browser or desktop app)
-    if (typeof os !== "undefined") {
+    if (
+      typeof os !== "undefined" &&
+      typeof os.networkInterfaces !== "undefined"
+    ) {
       const networkInterfaces = os.networkInterfaces();
       const hostname = os.hostname();
 

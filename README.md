@@ -13,20 +13,6 @@ npm install @riff-tech/code-checkout
 
 ## Usage
 
-### Configuration
-
-You can configure the package globally:
-
-```typescript
-import { configure } from "@riff-tech/code-checkout";
-
-configure({
-  softwareId: "your-software-id",
-  defaultSuccessUrl: "https://your-app.com/activate", // where your users will go after purchase of a license
-  defaultCancelUrl: "https://your-app.com", // where your users will go if they cancel checkout
-});
-```
-
 ### Analytics Tracking
 
 Track user actions and commands:
@@ -36,7 +22,7 @@ import { logAnalyticsEvent } from "@riff-tech/code-checkout";
 
 // Track a user action
 await logAnalyticsEvent({
-  softwareId: "your-software-id", // Optional if configured globally
+  softwareId: "your-software-id", // The unique identifier for your software, e.g. com.mypublisher.mysoftware
   commandId: "user.login", // The unique identifier for your command to track its usage
   licenseKey: "USER_LICENSE_KEY", // Optional as it will be cached automatically
 });
@@ -52,7 +38,7 @@ import { validateLicense } from "@riff-tech/code-checkout";
 // Validate a license
 const result = await validateLicense({
   licenseKey: "USER_LICENSE_KEY", // Optional as it will be cached automatically
-  softwareId: "your-software-id", // Optional if configured globally
+  softwareId: "your-software-id",
   forceOnlineValidation: false, // Optional, defaults to false. If `true` the license will skip the cache and validate against the server
   cacheDurationInHours: 24, // Optional, defaults to 24. Grace period for offline usage
 });
@@ -77,9 +63,11 @@ const appDisplayName = "Example App";
 const appUri = "vscode://"; // Optional, but this enables a button that can redirect back to your app
 const successUrl = "https://mysite.com"; // Optional, but can be used to show your website after purchase
 
+const licenseKeyToActivate = generateLicenseKey(); // Optionally generate a license key and pass it to `generateCheckoutUrl` for activation after checkout success
+
 // Generate a checkout URL and get the licenseKey that will be activated
 const { licenseKey, url } = generateCheckoutUrl({
-  softwareId: "your-software-id", // Optional if configured globally
+  softwareId: "your-software-id",
   successUrl: `https://codecheckout.dev/activate?key={licenseKey}&name={appDisplayName}&redirectUri={appUri}`, // Optional. Default is a page where the license and app name are shown. The query params are automatically attached to the default or custom `successUrl`
   cancelUrl: "https://riff-tech.com/codecheckout", // Optional. Default is shown.
   testMode: false, // Optional. Creates a test checkout session where no charges are incurred
@@ -90,16 +78,6 @@ https: window.location.href = url;
 ```
 
 ## API Reference
-
-### Configuration
-
-```typescript
-configure({
-  softwareId: string;
-  defaultSuccessUrl?: string;
-  defaultCancelUrl?: string;
-});
-```
 
 ### Analytics Tracking
 
@@ -119,8 +97,8 @@ logAnalyticsEvent({
 
 ```typescript
 validateLicense({
-  licenseKey: string;
-  softwareId?: string;
+  softwareId: string;
+  licenseKey?: string;
   machineId?: string;
   sessionId?: string;
   environment?: object;
@@ -133,12 +111,16 @@ validateLicense({
 
 ```typescript
 generateCheckoutUrl({
-  softwareId?: string;
+  softwareId: string;
   successUrl?: string;
   cancelUrl?: string;
-  testMode: boolean;
+  testMode?: boolean;
 }): { licenseKey: string; url: string };
 ```
+
+## Examples
+
+Example applications can be found in the `/examples` folder for reference.
 
 ## License
 
