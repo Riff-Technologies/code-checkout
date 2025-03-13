@@ -25,8 +25,8 @@ configure({
 async function trackAnalyticsEvent(): Promise<void> {
   try {
     const result = await logAnalyticsEvent({
-      softwareId: "example-software-id",
       commandId: "user.login",
+      // softwareId: "example-software-id",
       licenseKey: "EXAMPLE-LICENSE-KEY",
     });
 
@@ -90,8 +90,8 @@ async function createCheckoutLink(): Promise<void> {
 
   // Uncomment these lines to run the examples
   await trackAnalyticsEvent();
-  await checkLicense();
-  await createCheckoutLink();
+  // await checkLicense();
+  // await createCheckoutLink();
 
   console.log("Examples completed");
 })().catch((error) => {

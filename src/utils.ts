@@ -17,6 +17,51 @@ export function generateLicenseKey(): string {
 }
 
 /**
+ * Get a cached license key for a software ID
+ * @param softwareId - The software ID to get the license key for
+ * @returns The cached license key, or undefined if not found
+ */
+export function getCachedLicenseKey(softwareId: string): string | undefined {
+  try {
+    // Try to get the license key from localStorage in browser environments
+    if (typeof localStorage !== "undefined") {
+      const key = `codecheckout_license_${softwareId}`;
+      return localStorage.getItem(key) || undefined;
+    }
+
+    // For Node.js environments, we would need to implement a different caching mechanism
+    // This could be done using the cache storage, but for simplicity we'll return undefined
+    return undefined;
+  } catch (error) {
+    console.error("Error getting cached license key:", error);
+    return undefined;
+  }
+}
+
+/**
+ * Cache a license key for a software ID
+ * @param softwareId - The software ID to cache the license key for
+ * @param licenseKey - The license key to cache
+ */
+export function cacheLicenseKey(softwareId: string, licenseKey: string): void {
+  try {
+    // Try to store the license key in localStorage in browser environments
+    if (typeof localStorage !== "undefined") {
+      const key = `codecheckout_license_${softwareId}`;
+      localStorage.setItem(key, licenseKey);
+    }
+
+    // For Node.js environments, we would need to implement a different caching mechanism
+    // This could be done using the cache storage, but for simplicity we'll just log a message
+    console.log(
+      `Caching license key ${licenseKey} for software ID ${softwareId}`
+    );
+  } catch (error) {
+    console.error("Error caching license key:", error);
+  }
+}
+
+/**
  * Generate a unique machine ID based on hardware information
  * @returns A unique machine ID string
  */

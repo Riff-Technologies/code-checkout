@@ -16,10 +16,10 @@ export interface CodeCheckoutConfig {
  * Parameters for logging analytics events
  */
 export interface AnalyticsEventParams {
-  /** Unique identifier for the software using CodeCheckout */
-  softwareId: string;
   /** Identifier for the command or action being tracked */
   commandId: string;
+  /** Unique identifier for the software using CodeCheckout */
+  softwareId?: string;
   /** License key associated with the software */
   licenseKey?: string;
   /** Unique identifier for the machine running the software */

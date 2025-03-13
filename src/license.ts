@@ -1,6 +1,11 @@
 import { ValidateLicenseParams, ValidateLicenseResponse } from "./types";
 import { createApiClient } from "./api";
-import { generateMachineId, generateSessionId, createCacheKey } from "./utils";
+import {
+  generateMachineId,
+  generateSessionId,
+  createCacheKey,
+  cacheLicenseKey,
+} from "./utils";
 import { getConfig } from "./config";
 import { createCacheStorage } from "./cache";
 
@@ -145,6 +150,11 @@ async function performOnlineValidation(
     reason: response.reason,
     timestamp: Date.now(),
   });
+
+  // If the license is valid, cache the license key for use in analytics events
+  if (response.isValid) {
+    cacheLicenseKey(softwareId, params.licenseKey);
+  }
 
   return response;
 }
