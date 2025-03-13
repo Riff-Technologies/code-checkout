@@ -89,8 +89,8 @@ async function createCheckoutLink(): Promise<void> {
   console.log("Running CodeCheckout examples...");
 
   // Uncomment these lines to run the examples
-  await trackAnalyticsEvent();
-  // await checkLicense();
+  // await trackAnalyticsEvent();
+  await checkLicense();
   // await createCheckoutLink();
 
   console.log("Examples completed");

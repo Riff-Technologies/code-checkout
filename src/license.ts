@@ -5,6 +5,7 @@ import {
   generateSessionId,
   createCacheKey,
   cacheLicenseKey,
+  getCachedLicenseKey,
 } from "./utils";
 import { getConfig } from "./config";
 import { createCacheStorage } from "./cache";
@@ -23,14 +24,15 @@ const cacheStorage = createCacheStorage();
 export async function validateLicense(
   params: ValidateLicenseParams
 ): Promise<ValidateLicenseResponse> {
+  const config = getConfig();
+  const softwareId = params.softwareId || config.softwareId;
+  const licenseKey = params.licenseKey || getCachedLicenseKey(softwareId);
+
   try {
     // Validate required parameters
-    if (!params.licenseKey) {
+    if (!licenseKey) {
       throw new Error("licenseKey is required for license validation");
     }
-
-    // Get configuration with any overrides
-    const config = getConfig({ softwareId: params.softwareId });
 
     // Fill in optional parameters with defaults if not provided
     const machineId = params.machineId || generateMachineId();
@@ -40,7 +42,7 @@ export async function validateLicense(
     const forceOnlineValidation = params.forceOnlineValidation || false;
 
     // Create a cache key for this license
-    const cacheKey = createCacheKey(params.licenseKey, config.softwareId);
+    const cacheKey = createCacheKey(licenseKey, softwareId);
 
     // Check cache first if not forcing online validation
     if (!forceOnlineValidation) {
@@ -86,10 +88,7 @@ export async function validateLicense(
 
     // In case of error, try to use cached data even if expired
     try {
-      const cacheKey = createCacheKey(
-        params.licenseKey,
-        params.softwareId || getConfig().softwareId
-      );
+      const cacheKey = createCacheKey(licenseKey || "", softwareId);
 
       const cachedData = await cacheStorage.get(cacheKey);
       if (cachedData) {
@@ -122,6 +121,10 @@ async function performOnlineValidation(
   cacheKey: string,
   softwareId: string
 ): Promise<ValidateLicenseResponse> {
+  if (!params.licenseKey) {
+    throw new Error("licenseKey is required for license validation");
+  }
+
   // Create API client
   const apiClient = createApiClient({ softwareId });
 

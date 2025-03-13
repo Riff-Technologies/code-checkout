@@ -43,7 +43,7 @@ export interface AnalyticsEventResponse {
  */
 export interface ValidateLicenseParams {
   /** License key to validate */
-  licenseKey: string;
+  licenseKey?: string;
   /** Unique identifier for the software using CodeCheckout */
   softwareId?: string;
   /** Unique identifier for the machine running the software */
