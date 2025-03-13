@@ -135,3 +135,13 @@ generateCheckoutUrl({
 ## License
 
 MIT
+
+## Examples
+
+You can find example implementations in our [GitHub repository](https://github.com/Riff-Technologies/code-checkout/tree/main/examples):
+
+- **Browser Example**: Implementation in a browser environment using Vite
+- **Node.js Server Example**: Implementation in a Node.js server using Express
+- **Basic Usage Example**: Simple TypeScript program showing core functionality
+
+Each example includes detailed documentation and setup instructions.

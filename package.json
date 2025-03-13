@@ -1,9 +1,18 @@
 {
   "name": "@riff-tech/code-checkout",
   "version": "2.0.0",
-  "main": "dist/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "type": "commonjs",
+  "sideEffects": false,
   "scripts": {
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc",
@@ -25,7 +34,8 @@
   "description": "code-checkout platform package to add licenses and payment support to your software.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Riff-Technologies/code-checkout.git"
+    "url": "git+https://github.com/Riff-Technologies/code-checkout.git",
+    "directory": "examples"
   },
   "bugs": {
     "url": "https://github.com/Riff-Technologies/code-checkout/issues"
