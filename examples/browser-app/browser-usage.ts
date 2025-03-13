@@ -8,7 +8,7 @@ import {
   validateLicense,
   generateCheckoutUrl,
   generateLicenseKey,
-} from "../../src";
+} from "code-checkout";
 
 // Define types for our example
 type LicenseStatus = {
@@ -21,12 +21,11 @@ type LicenseStatus = {
  */
 class BrowserLicenseManager {
   private readonly softwareId: string;
-  private licenseKey: string | null;
+  private licenseKey: string | null = "M7XQPSBU-LI48MAOQR2";
   private licenseStatus: LicenseStatus;
 
   constructor() {
     this.softwareId = "riff-tech.testmystuff";
-    this.licenseKey = localStorage.getItem("licenseKey");
     this.licenseStatus = { isValid: false, message: "License not validated" };
 
     // Configure the package with browser-specific settings

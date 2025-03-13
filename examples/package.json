@@ -4,7 +4,7 @@
   "description": "Example applications for the CodeCheckout package",
   "scripts": {
     "start:server": "ts-node ./node-server/server-usage.ts",
-    "start:browser": "npx vite ./browser-app",
+    "start:browser": "cd .. && npm install && npm run build && cd examples/browser-app && npm install && npx vite",
     "start:ts-program": "ts-node ./ts-program/basic-usage.ts",
     "build": "tsc"
   },
