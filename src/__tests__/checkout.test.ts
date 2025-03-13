@@ -163,7 +163,7 @@ describe("Checkout", () => {
     // Mock getConfig to return a valid configuration
     (getConfig as jest.Mock).mockReturnValue({
       softwareId: "test-software",
-      baseUrl: "https://api.riff-tech.com/v1",
+      baseUrl: "https://dev-api.riff-tech.com/v1",
     });
 
     // Mock API client to throw an error
@@ -176,7 +176,7 @@ describe("Checkout", () => {
 
     // Verify the result contains a fallback URL
     expect(result.licenseKey).toBe("TEST-LICENSE-KEY");
-    expect(result.url).toContain("https://api.riff-tech.com/v1/checkout");
+    expect(result.url).toContain("https://dev-api.riff-tech.com/v1/checkout");
     expect(result.url).toContain("softwareId=test-software");
     expect(result.url).toContain("licenseKey=TEST-LICENSE-KEY");
     expect(result.url).toContain("testMode=true");

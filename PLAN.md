@@ -1,6 +1,4 @@
-prompt
-
-I want to make a typescript package available on npm that developers can install in their projects in order to add support for software licensing and generating checkout session URLs for their users to purchase licenses.
+This is a typescript package available on npm that developers can install in their projects in order to add support for software licensing and generating checkout session URLs for their users to purchase licenses.
 
 The package will expose these functions that developers can implement to add paywall support and license purchase functionality in their software:
 
