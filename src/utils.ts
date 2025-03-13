@@ -80,16 +80,25 @@ export function cacheLicenseKey(softwareId: string, licenseKey: string): void {
 
 /**
  * Generate a unique machine ID based on hardware information
- * @returns A unique machine ID string
+ * @returns A unique machine ID string, or null in Node.js server environments
  */
-export function generateMachineId(): string {
+export function generateMachineId(): string | null {
+  // For Node.js environments, return null as machine ID tracking is not appropriate for servers
+  if (
+    typeof process !== "undefined" &&
+    process.versions &&
+    process.versions.node
+  ) {
+    return null;
+  }
+
   // Return cached machine ID if available
   if (cachedMachineId) {
     return cachedMachineId;
   }
 
   try {
-    // Try to use hardware-specific information if available
+    // Try to use hardware-specific information if available (browser or desktop app)
     if (typeof os !== "undefined") {
       const networkInterfaces = os.networkInterfaces();
       const hostname = os.hostname();
@@ -122,7 +131,7 @@ export function generateMachineId(): string {
     console.error("Error generating machine ID from hardware info:", error);
   }
 
-  // Fall back to a persistent random ID
+  // Try to get a persistent machine ID from storage (for browser environments)
   try {
     // Try to use localStorage in browser environments
     if (typeof localStorage !== "undefined") {
@@ -138,10 +147,10 @@ export function generateMachineId(): string {
       return newMachineId;
     }
   } catch (error) {
-    // Ignore localStorage errors
+    console.error("Error getting/setting persistent machine ID:", error);
   }
 
-  // Last resort: generate a new UUID each time
+  // Last resort: generate a new UUID each time (for browser environments)
   const fallbackMachineId = uuidv4();
   cachedMachineId = fallbackMachineId;
   return fallbackMachineId;
@@ -149,9 +158,18 @@ export function generateMachineId(): string {
 
 /**
  * Generate a unique session ID
- * @returns A unique session ID string
+ * @returns A unique session ID string, or null in Node.js server environments
  */
-export function generateSessionId(): string {
+export function generateSessionId(): string | null {
+  // For Node.js environments, return null as session ID tracking is not appropriate for servers
+  if (
+    typeof process !== "undefined" &&
+    process.versions &&
+    process.versions.node
+  ) {
+    return null;
+  }
+
   // Return cached session ID if available
   if (cachedSessionId) {
     return cachedSessionId;

@@ -4,7 +4,7 @@ import { CodeCheckoutConfig } from "./types";
  * Default configuration values for the CodeCheckout package
  */
 const DEFAULT_CONFIG: Partial<CodeCheckoutConfig> = {
-  baseUrl: "https://api.codecheckout.dev",
+  baseUrl: "https://api.riff-tech.com/v1",
   defaultSuccessUrl: "https://codecheckout.dev/activate",
   defaultCancelUrl: "https://codecheckout.dev",
 };

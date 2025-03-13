@@ -29,8 +29,8 @@ export async function logAnalyticsEvent(
     }
 
     // Fill in optional parameters with defaults if not provided
-    const machineId = params.machineId || generateMachineId();
-    const sessionId = params.sessionId || generateSessionId();
+    const machineId = params.machineId || generateMachineId() || undefined;
+    const sessionId = params.sessionId || generateSessionId() || undefined;
     const timestamp = params.timestamp || getCurrentTimestamp();
 
     // Try to get a cached license key if one isn't provided

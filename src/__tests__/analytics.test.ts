@@ -11,6 +11,12 @@ jest.mock("../utils", () => ({
   generateMachineId: jest.fn().mockReturnValue("test-machine-id"),
   generateSessionId: jest.fn().mockReturnValue("test-session-id"),
   getCurrentTimestamp: jest.fn().mockReturnValue("2023-01-01T00:00:00.000Z"),
+  getCachedLicenseKey: jest.fn().mockReturnValue(undefined),
+  createCacheKey: jest
+    .fn()
+    .mockImplementation(
+      (licenseKey, softwareId) => `${softwareId}:${licenseKey}`
+    ),
 }));
 
 describe("Analytics", () => {
@@ -26,7 +32,6 @@ describe("Analytics", () => {
 
   test("logAnalyticsEvent should throw error if softwareId is not provided", async () => {
     await expect(
-      // @ts-expect-error: Intentionally missing required property for test
       logAnalyticsEvent({ commandId: "test.command" })
     ).resolves.toEqual({ success: false });
   });
@@ -65,9 +70,9 @@ describe("Analytics", () => {
 
     const mockApiClient = (createApiClient as jest.Mock).mock.results[0].value;
     expect(mockApiClient.post).toHaveBeenCalledWith(
-      "/analytics/event",
+      "/analytics/events",
       expect.objectContaining({
-        softwareId: params.softwareId,
+        extensionId: params.softwareId,
         commandId: params.commandId,
         licenseKey: params.licenseKey,
         machineId: params.machineId,
@@ -80,6 +85,7 @@ describe("Analytics", () => {
     expect(utils.generateMachineId).not.toHaveBeenCalled();
     expect(utils.generateSessionId).not.toHaveBeenCalled();
     expect(utils.getCurrentTimestamp).not.toHaveBeenCalled();
+    expect(utils.getCachedLicenseKey).not.toHaveBeenCalled();
   });
 
   test("logAnalyticsEvent should use default values when not provided", async () => {
@@ -92,9 +98,9 @@ describe("Analytics", () => {
 
     const mockApiClient = (createApiClient as jest.Mock).mock.results[0].value;
     expect(mockApiClient.post).toHaveBeenCalledWith(
-      "/analytics/event",
+      "/analytics/events",
       expect.objectContaining({
-        softwareId: params.softwareId,
+        extensionId: params.softwareId,
         commandId: params.commandId,
         machineId: "test-machine-id",
         sessionId: "test-session-id",
@@ -106,5 +112,6 @@ describe("Analytics", () => {
     expect(utils.generateMachineId).toHaveBeenCalled();
     expect(utils.generateSessionId).toHaveBeenCalled();
     expect(utils.getCurrentTimestamp).toHaveBeenCalled();
+    expect(utils.getCachedLicenseKey).toHaveBeenCalled();
   });
 });

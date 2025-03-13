@@ -16,18 +16,36 @@ describe("Utils", () => {
     expect(key1).not.toEqual(key2); // Keys should be unique
   });
 
-  test("generateMachineId should return a string", () => {
+  test("generateMachineId should return a string or null", () => {
     const machineId = generateMachineId();
 
-    expect(typeof machineId).toBe("string");
-    expect(machineId.length).toBeGreaterThan(0);
+    if (machineId !== null) {
+      expect(typeof machineId).toBe("string");
+      expect(machineId.length).toBeGreaterThan(0);
+    } else {
+      // In Node.js environments, it should return null
+      expect(
+        typeof process !== "undefined" &&
+          !!process.versions &&
+          !!process.versions.node
+      ).toBe(true);
+    }
   });
 
-  test("generateSessionId should return a string", () => {
+  test("generateSessionId should return a string or null", () => {
     const sessionId = generateSessionId();
 
-    expect(typeof sessionId).toBe("string");
-    expect(sessionId.length).toBeGreaterThan(0);
+    if (sessionId !== null) {
+      expect(typeof sessionId).toBe("string");
+      expect(sessionId.length).toBeGreaterThan(0);
+    } else {
+      // In Node.js environments, it should return null
+      expect(
+        typeof process !== "undefined" &&
+          !!process.versions &&
+          !!process.versions.node
+      ).toBe(true);
+    }
   });
 
   test("getCurrentTimestamp should return a valid ISO timestamp", () => {

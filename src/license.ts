@@ -35,8 +35,8 @@ export async function validateLicense(
     }
 
     // Fill in optional parameters with defaults if not provided
-    const machineId = params.machineId || generateMachineId();
-    const sessionId = params.sessionId || generateSessionId();
+    const machineId = params.machineId || generateMachineId() || undefined;
+    const sessionId = params.sessionId || generateSessionId() || undefined;
     const cacheDurationInHours =
       params.cacheDurationInHours || DEFAULT_CACHE_DURATION;
     const forceOnlineValidation = params.forceOnlineValidation || false;
@@ -136,8 +136,8 @@ async function performOnlineValidation(
     "/validate",
     {
       extensionId: softwareId,
-      machineId: params.machineId || generateMachineId(),
-      sessionId: params.sessionId || generateSessionId(),
+      machineId: params.machineId || generateMachineId() || undefined,
+      sessionId: params.sessionId || generateSessionId() || undefined,
       environment: params.environment || {},
     },
     {
