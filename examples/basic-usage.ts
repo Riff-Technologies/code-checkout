@@ -11,7 +11,7 @@ import {
 // Configure the package globally
 configure({
   softwareId: "example-software-id",
-  baseUrl: "https://api.riff-tech.com/v1",
+  baseUrl: "https://dev-api.riff-tech.com/v1",
   defaultSuccessUrl: "https://example.com/activate",
   defaultCancelUrl: "https://example.com",
 });

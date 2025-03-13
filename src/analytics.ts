@@ -36,7 +36,7 @@ export async function logAnalyticsEvent(
     const requestPromise = apiClient.post<AnalyticsEventResponse>(
       "/analytics/event",
       {
-        softwareId: params.softwareId,
+        extensionId: params.softwareId,
         commandId: params.commandId,
         licenseKey: params.licenseKey,
         machineId,

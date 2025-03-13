@@ -121,16 +121,13 @@ async function performOnlineValidation(
   const apiClient = createApiClient({ softwareId });
 
   // Make the API request
-  const response = await apiClient.post<ValidateLicenseResponse>(
-    "/license/validate",
-    {
-      licenseKey: params.licenseKey,
-      softwareId,
-      machineId: params.machineId || generateMachineId(),
-      sessionId: params.sessionId || generateSessionId(),
-      environment: params.environment || {},
-    }
-  );
+  const response = await apiClient.post<ValidateLicenseResponse>("/validate", {
+    licenseKey: params.licenseKey,
+    extensionId: softwareId,
+    machineId: params.machineId || generateMachineId(),
+    sessionId: params.sessionId || generateSessionId(),
+    environment: params.environment || {},
+  });
 
   // Cache the result
   await cacheStorage.set(cacheKey, {
