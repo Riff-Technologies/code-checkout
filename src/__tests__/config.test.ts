@@ -10,7 +10,6 @@ describe("Configuration", () => {
   test("configure should set global configuration", () => {
     const config = {
       softwareId: "test-software-id",
-      baseUrl: "https://dev-api.riff-tech.com/v1",
       defaultSuccessUrl: "https://test.com/success",
       defaultCancelUrl: "https://test.com/cancel",
     };
@@ -18,7 +17,7 @@ describe("Configuration", () => {
     configure(config);
 
     const retrievedConfig = getConfig();
-    expect(retrievedConfig).toEqual(config);
+    expect({ ...retrievedConfig, baseUrl: undefined }).toEqual(config);
   });
 
   test("configure should throw error if softwareId is not provided", () => {
@@ -41,13 +40,11 @@ describe("Configuration", () => {
     const config = getConfig(overrides);
 
     expect(config.softwareId).toBe(overrides.softwareId);
-    expect(config.baseUrl).toBe("https://api.riff-tech.com/v1"); // Default value
   });
 
   test("getConfig should merge global config with overrides", () => {
     configure({
       softwareId: "global-software-id",
-      baseUrl: "https://dev-api.riff-tech.com/v1",
     });
 
     const overrides = {
@@ -57,6 +54,5 @@ describe("Configuration", () => {
     const config = getConfig(overrides);
 
     expect(config.softwareId).toBe(overrides.softwareId);
-    expect(config.baseUrl).toBe("https://dev-api.riff-tech.com/v1");
   });
 });

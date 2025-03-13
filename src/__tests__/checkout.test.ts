@@ -53,7 +53,6 @@ describe("Checkout", () => {
     // Mock getConfig to return a valid configuration
     (getConfig as jest.Mock).mockReturnValue({
       softwareId: "test-software",
-      baseUrl: "https://api.riff-tech.com/v1",
       defaultSuccessUrl: "https://test.com/success",
       defaultCancelUrl: "https://test.com/cancel",
     });
@@ -164,7 +163,7 @@ describe("Checkout", () => {
     // Mock getConfig to return a valid configuration
     (getConfig as jest.Mock).mockReturnValue({
       softwareId: "test-software",
-      baseUrl: "https://api.riff-tech.com",
+      baseUrl: "https://api.riff-tech.com/v1",
     });
 
     // Mock API client to throw an error

@@ -37,6 +37,7 @@ class ServerLicenseManager {
     // Configure the package with server-specific settings
     configure({
       softwareId: this.softwareId,
+      baseUrl: "https://dev-api.riff-tech.com/v1",
       defaultSuccessUrl: "https://example.com/activate",
       defaultCancelUrl: "https://example.com",
     });

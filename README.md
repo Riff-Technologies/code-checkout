@@ -19,7 +19,6 @@ import { configure } from "@riff-tech/code-checkout";
 
 configure({
   softwareId: "your-software-id",
-  baseUrl: "https://api.riff-tech.com/v1",
   defaultSuccessUrl: "https://your-app.com/activate",
   defaultCancelUrl: "https://your-app.com",
 });
@@ -90,7 +89,6 @@ window.location.href = url;
 ```typescript
 configure({
   softwareId: string;
-  baseUrl?: string;
   defaultSuccessUrl?: string;
   defaultCancelUrl?: string;
 });

@@ -4,7 +4,7 @@ import { CodeCheckoutConfig } from "./types";
  * Default configuration values for the CodeCheckout package
  */
 const DEFAULT_CONFIG: Partial<CodeCheckoutConfig> = {
-  baseUrl: "https://api.riff-tech.com/v1",
+  baseUrl: "https://dev-api.riff-tech.com/v1",
   defaultSuccessUrl: "https://codecheckout.dev/activate",
   defaultCancelUrl: "https://codecheckout.dev",
 };
@@ -45,10 +45,11 @@ export function getConfig(
 
   // If we have overrides with softwareId, we can use that even without global config
   if (filteredOverrides?.softwareId && !globalConfig) {
-    return {
+    const config = {
       ...DEFAULT_CONFIG,
       ...filteredOverrides,
     } as CodeCheckoutConfig;
+    return config;
   }
 
   // If we have no global config and no valid overrides, throw an error
@@ -61,6 +62,7 @@ export function getConfig(
   // Merge global config with any overrides
   if (filteredOverrides) {
     const overriddenConfig = {
+      ...DEFAULT_CONFIG,
       ...globalConfig,
       ...filteredOverrides,
     };

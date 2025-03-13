@@ -16,7 +16,7 @@ export class ApiClient {
   constructor(config: CodeCheckoutConfig) {
     this.config = config;
     this.client = axios.create({
-      baseURL: config.baseUrl || "https://api.riff-tech.com/v1",
+      baseURL: config.baseUrl,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -62,11 +62,6 @@ export class ApiClient {
     options?: AxiosRequestConfig
   ): Promise<T> {
     try {
-      console.log("POST request to:", path);
-      console.log("Data:", data);
-      console.log("Options:", options);
-      console.log("Config:", this.config);
-      console.log("Full URL:", `${this.config.baseUrl}${path}`);
       const response = await this.client.post<T>(path, data, options);
       return response.data;
     } catch (error) {

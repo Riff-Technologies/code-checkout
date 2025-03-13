@@ -28,6 +28,8 @@ export interface AnalyticsEventParams {
   sessionId?: string;
   /** Timestamp for when the event occurred */
   timestamp?: string;
+  /** Metadata to include with the event */
+  metadata?: Record<string, unknown>;
 }
 
 /**

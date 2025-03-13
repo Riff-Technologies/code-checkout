@@ -66,11 +66,11 @@ export async function generateCheckoutUrl(
     console.error("Error generating checkout URL:", error);
 
     // Fallback to constructing the URL locally if the API call fails
-    const baseUrl = config.baseUrl || "https://api.riff-tech.com";
     const checkoutPath = "v1/checkout";
 
+    console.log("config", config);
     // Create URL with query parameters
-    const url = new URL(checkoutPath, baseUrl);
+    const url = new URL(checkoutPath, config.baseUrl!);
     url.searchParams.append("softwareId", config.softwareId);
     url.searchParams.append("licenseKey", licenseKey);
 

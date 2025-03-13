@@ -63,7 +63,7 @@ yarn start:server
 ```bash
 curl -X POST http://localhost:3000/api/validate-license \
   -H "Content-Type: application/json" \
-  -d '{"licenseKey": "YOUR-LICENSE-KEY"}'
+  -d '{"licenseKey": "M7XQPSBU-LI48MAOQR2"}'
 ```
 
 ### Create Checkout (Server)
