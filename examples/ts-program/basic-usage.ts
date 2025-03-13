@@ -7,12 +7,11 @@ import {
   validateLicense,
   generateCheckoutUrl,
   generateLicenseKey,
-} from "../src";
+} from "../../src";
 
 // Configure the package globally
 configure({
   softwareId: "riff-tech.testmystuff",
-  baseUrl: "https://dev-api.riff-tech.com/v1",
   defaultSuccessUrl: "https://example.com/activate",
   defaultCancelUrl: "https://example.com",
 });

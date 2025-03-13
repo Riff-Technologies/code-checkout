@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeCheckout Browser Example</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .container {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      button {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+      }
+
+      #startCheckout {
+        background-color: #007bff;
+        color: white;
+      }
+
+      #startCheckout:hover {
+        background-color: #0056b3;
+      }
+
+      #validateLicense {
+        background-color: #28a745;
+        color: white;
+      }
+
+      #validateLicense:hover {
+        background-color: #218838;
+      }
+
+      #licenseStatus {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 4px;
+      }
+
+      #licenseStatus.valid {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      #licenseStatus.invalid {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>CodeCheckout Browser Example</h1>
+      <p>
+        This example demonstrates how to use the CodeCheckout package in a
+        browser environment.
+      </p>
+
+      <div class="button-group">
+        <button id="startCheckout">Start Checkout</button>
+        <button id="validateLicense">Validate License</button>
+      </div>
+
+      <div id="licenseStatus">License status will appear here</div>
+    </div>
+
+    <script type="module" src="browser-usage.ts"></script>
+  </body>
+</html>
