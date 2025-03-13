@@ -32,6 +32,7 @@ class BrowserLicenseManager {
     // Configure the package with browser-specific settings
     configure({
       softwareId: this.softwareId,
+      baseUrl: "https://dev-api.riff-tech.com/v1",
       defaultSuccessUrl: `${window.location.origin}/activate`,
       defaultCancelUrl: window.location.origin,
     });
