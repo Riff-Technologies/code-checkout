@@ -33,7 +33,18 @@ export async function generateCheckoutUrl(
   };
 
   if (successUrl) {
-    queryParams.successUrl = successUrl;
+    // attach `key` always, and attach `name`, and `redirectUri` if they are provided to the successUrl
+    const newSuccessUrl = new URL(successUrl);
+    newSuccessUrl.searchParams.append("key", licenseKey);
+
+    if (params.name) {
+      newSuccessUrl.searchParams.append("name", params.name);
+    }
+    if (params.redirectUri) {
+      const encodedRedirectUri = encodeURIComponent(params.redirectUri);
+      newSuccessUrl.searchParams.append("redirectUri", encodedRedirectUri);
+    }
+    queryParams.successUrl = newSuccessUrl.toString();
   }
 
   if (cancelUrl) {
@@ -57,30 +68,6 @@ export async function generateCheckoutUrl(
     };
   } catch (error) {
     console.error("Error generating checkout URL:", error);
-
-    // Fallback to constructing the URL locally if the API call fails
-    const checkoutPath = "v1/checkout";
-
-    // Create URL with query parameters
-    const url = new URL(checkoutPath, config.baseUrl);
-    url.searchParams.append("softwareId", params.softwareId);
-    url.searchParams.append("licenseKey", licenseKey);
-
-    if (successUrl) {
-      url.searchParams.append("successUrl", successUrl);
-    }
-
-    if (cancelUrl) {
-      url.searchParams.append("cancelUrl", cancelUrl);
-    }
-
-    if (params.testMode) {
-      url.searchParams.append("testMode", "true");
-    }
-
-    return {
-      licenseKey,
-      url: url.toString(),
-    };
+    throw new Error("Error generating checkout URL");
   }
 }

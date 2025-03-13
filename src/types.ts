@@ -82,6 +82,10 @@ export interface GenerateCheckoutUrlParams {
   testMode?: boolean;
   /** Optionally pass in a license key, and if omitted it will be generated */
   licenseKey?: string;
+  /** Optionally pass in a name for the license key, and if omitted it will be generated */
+  name?: string;
+  /** Optionally pass in a redirect URI for the license key, and if omitted it will be generated */
+  redirectUri?: string;
 }
 
 /**

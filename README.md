@@ -67,6 +67,16 @@ if (result.isValid) {
 
 Create customized checkout experiences for your users:
 
+| Parameter     | Type      | Required | Description                                                                                                                                                                |
+| ------------- | --------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `softwareId`  | `string`  | Yes      | Unique identifier for your software using code-checkout                                                                                                                    |
+| `successUrl`  | `string`  | No       | URL to redirect to after successful checkout. Default is a code-checkout activation page. Query parameters for `key`, `name`, and `redirectUri` are automatically appended |
+| `cancelUrl`   | `string`  | No       | URL to redirect to if checkout is cancelled. Defaults to code-checkout homepage                                                                                            |
+| `testMode`    | `boolean` | No       | When `true`, creates a test checkout session with no charges. Defaults to `false`                                                                                          |
+| `licenseKey`  | `string`  | No       | Custom license key to activate after checkout. If omitted, one will be generated                                                                                           |
+| `name`        | `string`  | No       | Display name for your software. If provided, appended as query param to `successUrl`                                                                                       |
+| `redirectUri` | `string`  | No       | URI to redirect back to your application. If provided, appended as query param to `successUrl`                                                                             |
+
 ```typescript
 import { generateCheckoutUrl } from "@riff-tech/code-checkout";
 
@@ -79,10 +89,15 @@ const licenseKeyToActivate = generateLicenseKey(); // Optionally generate a lice
 // Generate a checkout URL and get the licenseKey that will be activated
 const { licenseKey, url } = generateCheckoutUrl({
   softwareId: "your-software-id",
-  successUrl: `https://codecheckout.dev/activate?key={licenseKey}&name={appDisplayName}&redirectUri={appUri}`, // Optional. Default is a page where the license and app name are shown. The query params are automatically attached to the default or custom `successUrl`
+  successUrl: `https://codecheckout.dev/activate?key={licenseKey}`, // Optional. Default is a page where the license and app name are shown. The query params are automatically attached to the default or custom `successUrl`
   cancelUrl: "https://riff-tech.com/codecheckout", // Optional. Default is shown.
+  name: appDisplayName, // Optional. If provided, it will be attached as a query param to the `successUrl`
+  redirectUri: successUrl, // Optional. If provided, it will be attached as a query param to the `successUrl`
   testMode: false, // Optional. Creates a test checkout session where no charges are incurred
 });
+
+console.log("checkoutUrl: ", url);
+// http://riff-tech.com/activate?key=YOUR-LICENSE-KEY-HERE&name=Your%20Software%20Name&redirectUri=https://your-app.com
 
 // Redirect the user to the checkout URL
 https: window.location.href = url;
@@ -126,6 +141,8 @@ generateCheckoutUrl({
   successUrl?: string;
   cancelUrl?: string;
   testMode?: boolean;
+  name?: string;
+  redirectUri: string;
 }): { licenseKey: string; url: string };
 ```
 

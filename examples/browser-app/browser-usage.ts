@@ -83,8 +83,8 @@ class BrowserLicenseManager {
         softwareId: this.softwareId,
         testMode: true,
         licenseKey,
-        successUrl: `${window.location.origin}/activate?key=${licenseKey}`,
-        cancelUrl: `${window.location.origin}/cancel`,
+        name: "My Software",
+        redirectUri: "https://www.google.com",
       });
 
       // Log the checkout attempt
