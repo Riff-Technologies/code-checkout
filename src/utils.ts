@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import * as os from "os";
 import * as crypto from "crypto";
+import { getNodeJsLicenseKey, setNodeJsLicenseKey } from "./cache";
 
 // Cache for machine and session IDs
 let cachedMachineId: string | null = null;
@@ -29,8 +30,15 @@ export function getCachedLicenseKey(softwareId: string): string | undefined {
       return localStorage.getItem(key) || undefined;
     }
 
-    // For Node.js environments, we would need to implement a different caching mechanism
-    // This could be done using the cache storage, but for simplicity we'll return undefined
+    // For Node.js environments, use the file-based cache
+    if (
+      typeof process !== "undefined" &&
+      process.versions &&
+      process.versions.node
+    ) {
+      return getNodeJsLicenseKey(softwareId);
+    }
+
     return undefined;
   } catch (error) {
     console.error("Error getting cached license key:", error);
@@ -49,10 +57,19 @@ export function cacheLicenseKey(softwareId: string, licenseKey: string): void {
     if (typeof localStorage !== "undefined") {
       const key = `codecheckout_license_${softwareId}`;
       localStorage.setItem(key, licenseKey);
+      return;
     }
 
-    // For Node.js environments, we would need to implement a different caching mechanism
-    // This could be done using the cache storage, but for simplicity we'll just log a message
+    // For Node.js environments, use the file-based cache
+    if (
+      typeof process !== "undefined" &&
+      process.versions &&
+      process.versions.node
+    ) {
+      setNodeJsLicenseKey(softwareId, licenseKey);
+      return;
+    }
+
     console.log(
       `Caching license key ${licenseKey} for software ID ${softwareId}`
     );
