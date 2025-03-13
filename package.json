@@ -1,0 +1,27 @@
+{
+  "name": "@riff-tech/code-checkout",
+  "version": "2.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "code-checkout",
+    "license",
+    "payment",
+    "software",
+    "subscription"
+  ],
+  "license": "MIT",
+  "description": "code-checkout platform package to add licenses and payment support to your software.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Riff-Technologies/code-checkout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Riff-Technologies/code-checkout/issues"
+  },
+  "homepage": "https://riff-tech.com/codecheckout",
+  "author": "Riff Tech, LLC"
+}
