@@ -6,6 +6,7 @@ import {
   logAnalyticsEvent,
   validateLicense,
   generateCheckoutUrl,
+  generateLicenseKey,
 } from "../src";
 
 // Configure the package globally
@@ -18,7 +19,9 @@ configure({
 
 /**
  * Example of tracking an analytics event
+ * @ignore This function is not used in this example but is kept for reference
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function trackAnalyticsEvent(): Promise<void> {
   try {
     const result = await logAnalyticsEvent({
@@ -35,7 +38,9 @@ async function trackAnalyticsEvent(): Promise<void> {
 
 /**
  * Example of validating a license
+ * @ignore This function is not used in this example but is kept for reference
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function checkLicense(): Promise<void> {
   try {
     const result = await validateLicense({
@@ -56,10 +61,17 @@ async function checkLicense(): Promise<void> {
 /**
  * Example of generating a checkout URL
  */
-function createCheckoutLink(): void {
+async function createCheckoutLink(): Promise<void> {
   try {
-    const { licenseKey, url } = generateCheckoutUrl({
+    const licenseKey = generateLicenseKey();
+    const successUrl = "https://example.com/success";
+    const cancelUrl = "https://example.com/cancel";
+
+    const { url } = await generateCheckoutUrl({
       testMode: true,
+      licenseKey,
+      successUrl,
+      cancelUrl,
     });
 
     console.log("Generated license key:", licenseKey);
@@ -73,12 +85,15 @@ function createCheckoutLink(): void {
 }
 
 // Run the examples
-(async () => {
+(async (): Promise<void> => {
   console.log("Running CodeCheckout examples...");
 
-  // await trackAnalyticsEvent();
-  // await checkLicense();
-  createCheckoutLink();
+  // Uncomment these lines to run the examples
+  await trackAnalyticsEvent();
+  await checkLicense();
+  await createCheckoutLink();
 
   console.log("Examples completed");
-})();
+})().catch((error) => {
+  console.error("Error running examples:", error);
+});

@@ -4,15 +4,16 @@ import {
 } from "./types";
 import { getConfig } from "./config";
 import { generateLicenseKey } from "./utils";
+import { createApiClient } from "./api";
 
 /**
  * Generate a checkout URL for the CodeCheckout platform
  * @param params - Parameters for generating the checkout URL
  * @returns The generated license key and checkout URL
  */
-export function generateCheckoutUrl(
+export async function generateCheckoutUrl(
   params: GenerateCheckoutUrlParams
-): GenerateCheckoutUrlResponse {
+): Promise<GenerateCheckoutUrlResponse> {
   // Validate testMode is explicitly set
   if (params.testMode === undefined) {
     throw new Error(
@@ -23,36 +24,71 @@ export function generateCheckoutUrl(
   // Get configuration with any overrides
   const config = getConfig({ softwareId: params.softwareId });
 
-  // Generate a unique license key
-  const licenseKey = generateLicenseKey();
+  // Generate a unique license key if not provided
+  const licenseKey = params.licenseKey || generateLicenseKey();
 
   // Use provided URLs or defaults from config
   const successUrl = params.successUrl || config.defaultSuccessUrl;
   const cancelUrl = params.cancelUrl || config.defaultCancelUrl;
 
-  // Build the checkout URL
-  const baseUrl = config.baseUrl || "https://api.riff-tech.com";
-  const checkoutPath = "v1/checkout";
+  // Create API client
+  const apiClient = createApiClient({ softwareId: config.softwareId });
 
-  // Create URL with query parameters
-  const url = new URL(checkoutPath, baseUrl);
-  url.searchParams.append("softwareId", config.softwareId);
-  url.searchParams.append("licenseKey", licenseKey);
+  // Build query parameters
+  const queryParams: Record<string, string | number | boolean> = {
+    licenseKey,
+  };
 
   if (successUrl) {
-    url.searchParams.append("successUrl", successUrl);
+    queryParams.successUrl = successUrl;
   }
 
   if (cancelUrl) {
-    url.searchParams.append("cancelUrl", cancelUrl);
+    queryParams.cancelUrl = cancelUrl;
   }
 
   if (params.testMode) {
-    url.searchParams.append("testMode", "true");
+    queryParams.testMode = true;
   }
 
-  return {
-    licenseKey,
-    url: url.toString(),
-  };
+  // Call the checkout endpoint to get the checkout URL
+  try {
+    const response = await apiClient.get<{ url: string }>(
+      `/${config.softwareId}/checkout`,
+      queryParams
+    );
+
+    return {
+      licenseKey,
+      url: response.url,
+    };
+  } catch (error) {
+    console.error("Error generating checkout URL:", error);
+
+    // Fallback to constructing the URL locally if the API call fails
+    const baseUrl = config.baseUrl || "https://api.riff-tech.com";
+    const checkoutPath = "v1/checkout";
+
+    // Create URL with query parameters
+    const url = new URL(checkoutPath, baseUrl);
+    url.searchParams.append("softwareId", config.softwareId);
+    url.searchParams.append("licenseKey", licenseKey);
+
+    if (successUrl) {
+      url.searchParams.append("successUrl", successUrl);
+    }
+
+    if (cancelUrl) {
+      url.searchParams.append("cancelUrl", cancelUrl);
+    }
+
+    if (params.testMode) {
+      url.searchParams.append("testMode", "true");
+    }
+
+    return {
+      licenseKey,
+      url: url.toString(),
+    };
+  }
 }

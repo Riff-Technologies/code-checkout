@@ -80,6 +80,8 @@ export interface GenerateCheckoutUrlParams {
   cancelUrl?: string;
   /** Whether to use test mode for checkout */
   testMode: boolean;
+  /** Optionally pass in a license key, and if omitted it will be generated */
+  licenseKey?: string;
 }
 
 /**

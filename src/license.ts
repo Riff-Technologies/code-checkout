@@ -120,14 +120,24 @@ async function performOnlineValidation(
   // Create API client
   const apiClient = createApiClient({ softwareId });
 
+  // The license key is the Authorization header
+  const authorization = `Bearer ${params.licenseKey}`;
+
   // Make the API request
-  const response = await apiClient.post<ValidateLicenseResponse>("/validate", {
-    licenseKey: params.licenseKey,
-    extensionId: softwareId,
-    machineId: params.machineId || generateMachineId(),
-    sessionId: params.sessionId || generateSessionId(),
-    environment: params.environment || {},
-  });
+  const response = await apiClient.post<ValidateLicenseResponse>(
+    "/validate",
+    {
+      extensionId: softwareId,
+      machineId: params.machineId || generateMachineId(),
+      sessionId: params.sessionId || generateSessionId(),
+      environment: params.environment || {},
+    },
+    {
+      headers: {
+        Authorization: authorization,
+      },
+    }
+  );
 
   // Cache the result
   await cacheStorage.set(cacheKey, {
