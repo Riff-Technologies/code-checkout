@@ -6,7 +6,6 @@ This directory contains example applications demonstrating how to use the CodeCh
 
 - `browser-usage.ts` - Example of using CodeCheckout in a browser environment
 - `server-usage.ts` - Example of using CodeCheckout in a Node.js server environment
-- `browser-example.html` - HTML page for demonstrating the browser example
 - `basic-usage.ts` - Basic usage examples of the package's core functionality
 
 ## Prerequisites
@@ -30,18 +29,26 @@ yarn install
 
 ## Running the Examples
 
+### TypeScript program example
+
+1. Run the program with `npm run start:ts-program`
+
+---
+
 ### Browser Example
 
-1. Start a development server (you can use tools like `vite` or `parcel`):
+1. Start a development server using `vite`
 
 ```bash
-npx vite
+npm run start:browser
 ```
 
-2. Open `browser-example.html` in your browser through the development server
+2. Open the localhost page in your browser through the development server
 3. Use the buttons to test license validation and checkout functionality
 
 ### Server Example
+
+---
 
 1. Start the server:
 
@@ -94,6 +101,5 @@ curl -X POST http://localhost:3000/api/create-checkout
 
 ## Additional Resources
 
-- [CodeCheckout Documentation](https://docs.riff-tech.com)
-- [API Reference](https://api.riff-tech.com/docs)
-- [Support](https://support.riff-tech.com)
+- [CodeCheckout Documentation](https://www.riff-tech.com/docs/guides)
+- [Support](mailto:shawn@riff-tech.com)
