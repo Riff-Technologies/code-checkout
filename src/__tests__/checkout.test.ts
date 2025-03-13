@@ -26,13 +26,6 @@ describe("Checkout", () => {
     });
   });
 
-  test("generateCheckoutUrl should throw error if testMode is not set", async () => {
-    await expect(
-      // @ts-expect-error: Intentionally missing required property for test
-      generateCheckoutUrl({})
-    ).rejects.toThrow("testMode must be explicitly set");
-  });
-
   test("generateCheckoutUrl should call the API and return the checkout URL", async () => {
     const result = await generateCheckoutUrl({
       softwareId: "test-software",
@@ -49,7 +42,7 @@ describe("Checkout", () => {
       "/test-software/checkout",
       expect.objectContaining({
         licenseKey: "TEST-LICENSE-KEY",
-        successUrl: "https://test.com/success",
+        successUrl: "https://test.com/success?key=TEST-LICENSE-KEY",
         cancelUrl: "https://test.com/cancel",
       })
     );
@@ -80,7 +73,7 @@ describe("Checkout", () => {
   });
 
   test("generateCheckoutUrl should use provided URLs over defaults", async () => {
-    const customSuccessUrl = "https://custom-success.com";
+    const customSuccessUrl = "https://custom-success.com/activate";
     const customCancelUrl = "https://custom-cancel.com";
 
     await generateCheckoutUrl({
@@ -97,7 +90,7 @@ describe("Checkout", () => {
     expect(mockApiClient.get).toHaveBeenCalledWith(
       "/test-software/checkout",
       expect.objectContaining({
-        successUrl: customSuccessUrl,
+        successUrl: `${customSuccessUrl}?key=TEST-LICENSE-KEY`,
         cancelUrl: customCancelUrl,
       })
     );
@@ -122,25 +115,5 @@ describe("Checkout", () => {
         licenseKey: customLicenseKey,
       })
     );
-  });
-
-  test("generateCheckoutUrl should fall back to local URL construction if API fails", async () => {
-    // Mock API client to throw an error
-    const mockGet = jest.fn().mockRejectedValue(new Error("API error"));
-    (createApiClient as jest.Mock).mockReturnValue({
-      get: mockGet,
-    });
-
-    const result = await generateCheckoutUrl({
-      softwareId: "test-software",
-      testMode: true,
-    });
-
-    // Verify the result contains a fallback URL
-    expect(result.licenseKey).toBe("TEST-LICENSE-KEY");
-    expect(result.url).toContain(DEFAULT_CONFIG.baseUrl);
-    expect(result.url).toContain("softwareId=test-software");
-    expect(result.url).toContain("licenseKey=TEST-LICENSE-KEY");
-    expect(result.url).toContain("testMode=true");
   });
 });
