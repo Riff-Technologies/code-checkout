@@ -34,11 +34,12 @@ export async function logAnalyticsEvent(
 
     // Make the API request in the background
     const requestPromise = apiClient.post<AnalyticsEventResponse>(
-      "/analytics/event",
+      "/analytics/events",
       {
         extensionId: params.softwareId,
         commandId: params.commandId,
         licenseKey: params.licenseKey,
+        hasValidLicense: !!params.licenseKey,
         machineId,
         sessionId,
         timestamp,

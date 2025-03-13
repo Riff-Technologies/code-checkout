@@ -39,11 +39,15 @@ export function configure(config: CodeCheckoutConfig): void {
 export function getConfig(
   overrides?: Partial<CodeCheckoutConfig>
 ): CodeCheckoutConfig {
+  const filteredOverrides = Object.fromEntries(
+    Object.entries(overrides || {}).filter(([_, value]) => value !== undefined)
+  );
+
   // If we have overrides with softwareId, we can use that even without global config
-  if (overrides?.softwareId && !globalConfig) {
+  if (filteredOverrides?.softwareId && !globalConfig) {
     return {
       ...DEFAULT_CONFIG,
-      ...overrides,
+      ...filteredOverrides,
     } as CodeCheckoutConfig;
   }
 
@@ -55,10 +59,10 @@ export function getConfig(
   }
 
   // Merge global config with any overrides
-  if (overrides) {
+  if (filteredOverrides) {
     const overriddenConfig = {
       ...globalConfig,
-      ...overrides,
+      ...filteredOverrides,
     };
     return overriddenConfig;
   }

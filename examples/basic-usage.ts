@@ -10,7 +10,7 @@ import {
 
 // Configure the package globally
 configure({
-  softwareId: "example-software-id",
+  softwareId: "riff-tech.testmystuff",
   baseUrl: "https://dev-api.riff-tech.com/v1",
   defaultSuccessUrl: "https://example.com/activate",
   defaultCancelUrl: "https://example.com",
@@ -39,7 +39,7 @@ async function trackAnalyticsEvent(): Promise<void> {
 async function checkLicense(): Promise<void> {
   try {
     const result = await validateLicense({
-      licenseKey: "EXAMPLE-LICENSE-KEY",
+      licenseKey: "M7XQPSBU-LI48MAOQR2",
       forceOnlineValidation: false,
     });
 
@@ -76,8 +76,8 @@ function createCheckoutLink(): void {
 (async () => {
   console.log("Running CodeCheckout examples...");
 
-  await trackAnalyticsEvent();
-  await checkLicense();
+  // await trackAnalyticsEvent();
+  // await checkLicense();
   createCheckoutLink();
 
   console.log("Examples completed");

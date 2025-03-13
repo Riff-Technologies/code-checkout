@@ -21,9 +21,7 @@ export function generateCheckoutUrl(
   }
 
   // Get configuration with any overrides
-  const config = getConfig({
-    ...(params.softwareId && { softwareId: params.softwareId }),
-  });
+  const config = getConfig({ softwareId: params.softwareId });
 
   // Generate a unique license key
   const licenseKey = generateLicenseKey();
