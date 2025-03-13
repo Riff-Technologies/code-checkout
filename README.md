@@ -1,6 +1,9 @@
-# CodeCheckout
+# code-checkout
 
-CodeCheckout is a simple, reliable npm package for analytics tracking, license validation with caching, and checkout URL generation, configurable for use across all JavaScript and TypeScript projects.
+[![npm version](https://badge.fury.io/js/@riff-tech%2Fcode-checkout-vscode.svg)](https://badge.fury.io/js/@riff-tech%2Fcode-checkout-vscode)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+code-checkout is a simple, reliable platform and package for analytics tracking, license validation with caching, and checkout URL generation, configurable for use across all JavaScript and TypeScript projects.
 
 ## Installation
 
@@ -19,8 +22,8 @@ import { configure } from "@riff-tech/code-checkout";
 
 configure({
   softwareId: "your-software-id",
-  defaultSuccessUrl: "https://your-app.com/activate",
-  defaultCancelUrl: "https://your-app.com",
+  defaultSuccessUrl: "https://your-app.com/activate", // where your users will go after purchase of a license
+  defaultCancelUrl: "https://your-app.com", // where your users will go if they cancel checkout
 });
 ```
 
@@ -34,8 +37,8 @@ import { logAnalyticsEvent } from "@riff-tech/code-checkout";
 // Track a user action
 await logAnalyticsEvent({
   softwareId: "your-software-id", // Optional if configured globally
-  commandId: "user.login",
-  licenseKey: "USER_LICENSE_KEY", // Optional
+  commandId: "user.login", // The unique identifier for your command to track its usage
+  licenseKey: "USER_LICENSE_KEY", // Optional as it will be cached automatically
 });
 ```
 
@@ -48,10 +51,10 @@ import { validateLicense } from "@riff-tech/code-checkout";
 
 // Validate a license
 const result = await validateLicense({
-  licenseKey: "USER_LICENSE_KEY",
+  licenseKey: "USER_LICENSE_KEY", // Optional as it will be cached automatically
   softwareId: "your-software-id", // Optional if configured globally
-  forceOnlineValidation: false, // Optional, defaults to false
-  cacheDurationInHours: 24, // Optional, defaults to 24
+  forceOnlineValidation: false, // Optional, defaults to false. If `true` the license will skip the cache and validate against the server
+  cacheDurationInHours: 24, // Optional, defaults to 24. Grace period for offline usage
 });
 
 if (result.isValid) {
@@ -70,16 +73,20 @@ Generate a checkout URL for your software:
 ```typescript
 import { generateCheckoutUrl } from "@riff-tech/code-checkout";
 
-// Generate a checkout URL
+const appDisplayName = "Example App";
+const appUri = "vscode://"; // Optional, but this enables a button that can redirect back to your app
+const successUrl = "https://mysite.com"; // Optional, but can be used to show your website after purchase
+
+// Generate a checkout URL and get the licenseKey that will be activated
 const { licenseKey, url } = generateCheckoutUrl({
   softwareId: "your-software-id", // Optional if configured globally
-  successUrl: "https://your-app.com/activate", // Optional if configured globally
-  cancelUrl: "https://your-app.com", // Optional if configured globally
-  testMode: false, // Required
+  successUrl: `https://codecheckout.dev/activate?key={licenseKey}&name={appDisplayName}&redirectUri={appUri}`, // Optional. Default is a page where the license and app name are shown. The query params are automatically attached to the default or custom `successUrl`
+  cancelUrl: "https://riff-tech.com/codecheckout", // Optional. Default is shown.
+  testMode: false, // Optional. Creates a test checkout session where no charges are incurred
 });
 
 // Redirect the user to the checkout URL
-window.location.href = url;
+https: window.location.href = url;
 ```
 
 ## API Reference
@@ -104,6 +111,7 @@ logAnalyticsEvent({
   machineId?: string;
   sessionId?: string;
   timestamp?: string;
+  metadata?: Record<string, unknown>; // Additional data you want to track
 }): Promise<{ success: boolean }>;
 ```
 
@@ -140,8 +148,8 @@ MIT
 
 You can find example implementations in our [GitHub repository](https://github.com/Riff-Technologies/code-checkout/tree/main/examples):
 
+- **Basic Usage Example**: Simple TypeScript program showing core functionality
 - **Browser Example**: Implementation in a browser environment using Vite
 - **Node.js Server Example**: Implementation in a Node.js server using Express
-- **Basic Usage Example**: Simple TypeScript program showing core functionality
 
 Each example includes detailed documentation and setup instructions.
