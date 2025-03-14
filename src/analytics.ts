@@ -48,6 +48,7 @@ export async function logAnalyticsEvent(
         machineId,
         sessionId,
         timestamp,
+        metadata: params.metadata,
       }
     );
 
