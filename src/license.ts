@@ -1,7 +1,7 @@
 import { ValidateLicenseParams, ValidateLicenseResponse } from "./types";
 import { createApiClient } from "./api";
 import {
-  generateMachineId,
+  getMachineId,
   generateSessionId,
   createCacheKey,
   cacheLicenseKey,
@@ -24,7 +24,8 @@ export async function validateLicense(
   params: ValidateLicenseParams
 ): Promise<ValidateLicenseResponse> {
   const softwareId = params.softwareId;
-  const licenseKey = params.licenseKey || getCachedLicenseKey(softwareId);
+  const licenseKey =
+    params.licenseKey || (await getCachedLicenseKey(softwareId));
 
   try {
     // Validate required parameters
@@ -33,7 +34,7 @@ export async function validateLicense(
     }
 
     // Fill in optional parameters with defaults if not provided
-    const machineId = params.machineId || generateMachineId() || undefined;
+    const machineId = params.machineId || (await getMachineId()) || undefined;
     const sessionId = params.sessionId || generateSessionId() || undefined;
     const cacheDurationInHours =
       params.cacheDurationInHours || DEFAULT_CACHE_DURATION;
@@ -134,7 +135,7 @@ async function performOnlineValidation(
     "/validate",
     {
       extensionId: softwareId,
-      machineId: params.machineId || generateMachineId() || undefined,
+      machineId: params.machineId || (await getMachineId()) || undefined,
       sessionId: params.sessionId || generateSessionId() || undefined,
       environment: params.environment || {},
     },

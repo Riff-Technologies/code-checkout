@@ -9,7 +9,7 @@ jest.mock("../api", () => ({
 }));
 
 jest.mock("../utils", () => ({
-  generateMachineId: jest.fn().mockReturnValue("test-machine-id"),
+  getMachineId: jest.fn().mockReturnValue("test-machine-id"),
   generateSessionId: jest.fn().mockReturnValue("test-session-id"),
   getCurrentTimestamp: jest.fn().mockReturnValue("2023-01-01T00:00:00.000Z"),
   getCachedLicenseKey: jest.fn().mockReturnValue(undefined),
@@ -145,7 +145,7 @@ describe("Analytics", () => {
     );
 
     // Verify we didn't call the utility functions since values were provided
-    expect(utils.generateMachineId).not.toHaveBeenCalled();
+    expect(utils.getMachineId).not.toHaveBeenCalled();
     expect(utils.generateSessionId).not.toHaveBeenCalled();
     expect(utils.getCurrentTimestamp).not.toHaveBeenCalled();
     expect(utils.getCachedLicenseKey).not.toHaveBeenCalled();
@@ -173,7 +173,7 @@ describe("Analytics", () => {
     );
 
     // Verify we called the utility functions to generate default values
-    expect(utils.generateMachineId).toHaveBeenCalled();
+    expect(utils.getMachineId).toHaveBeenCalled();
     expect(utils.generateSessionId).toHaveBeenCalled();
     expect(utils.getCurrentTimestamp).toHaveBeenCalled();
     expect(utils.getCachedLicenseKey).toHaveBeenCalled();

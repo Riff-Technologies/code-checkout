@@ -1,6 +1,6 @@
 import {
   generateLicenseKey,
-  generateMachineId,
+  getMachineId,
   generateSessionId,
   getCurrentTimestamp,
   createCacheKey,
@@ -16,8 +16,8 @@ describe("Utils", () => {
     expect(key1).not.toEqual(key2); // Keys should be unique
   });
 
-  test("generateMachineId should return a string or null", () => {
-    const machineId = generateMachineId();
+  test("getMachineId should return a string or null", async () => {
+    const machineId = await getMachineId();
 
     if (machineId !== null) {
       expect(typeof machineId).toBe("string");

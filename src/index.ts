@@ -7,11 +7,7 @@
 export { logAnalyticsEvent } from "./analytics";
 export { validateLicense } from "./license";
 export { generateCheckoutUrl } from "./checkout";
-export {
-  generateMachineId,
-  generateSessionId,
-  generateLicenseKey,
-} from "./utils";
+export { getMachineId, generateSessionId, generateLicenseKey } from "./utils";
 
 // Export types
 export {

@@ -1,8 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import * as crypto from "crypto";
+import { createCacheStorage } from "./cache";
 
-// Cache for machine and session IDs
-let cachedMachineId: string | null = null;
+// Create a shared cache instance
+const cache = createCacheStorage();
+
+// Cache for session ID (intentionally reset on page reload)
 let cachedSessionId: string | null = null;
 
 /**
@@ -16,22 +19,32 @@ export function generateLicenseKey(): string {
 }
 
 /**
- * Generate a unique machine ID
+ * Generate or retrieve a unique machine ID
  * @returns A unique machine ID string, or null if not available
  */
-export function generateMachineId(): string | null {
-  if (cachedMachineId) {
-    return cachedMachineId;
-  }
-
+export async function getMachineId(): Promise<string | null> {
   try {
-    // Try to use crypto API for a unique ID
+    // Try to get cached machine ID
+    const machineIdData = await cache.get("machine_id");
+    if (machineIdData?.isValid && typeof machineIdData.reason === "string") {
+      return machineIdData.reason;
+    }
+
+    // Generate new machine ID if none exists
     const buffer = new Uint8Array(16);
     crypto.getRandomValues(buffer);
-    cachedMachineId = Array.from(buffer)
+    const newMachineId = Array.from(buffer)
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
-    return cachedMachineId;
+
+    // Cache the new machine ID
+    await cache.set("machine_id", {
+      isValid: true,
+      reason: newMachineId,
+      timestamp: Date.now(),
+    });
+
+    return newMachineId;
   } catch (error) {
     console.error("Error generating machine ID:", error);
     return null;
@@ -61,14 +74,14 @@ export function generateSessionId(): string | null {
  * @param softwareId - The software ID to get the license key for
  * @returns The cached license key, or undefined if not found
  */
-export function getCachedLicenseKey(softwareId: string): string | undefined {
+export async function getCachedLicenseKey(
+  softwareId: string
+): Promise<string | undefined> {
   try {
-    // Try to get the license key from localStorage in browser environments
-    if (typeof localStorage !== "undefined") {
-      const key = `codecheckout_license_${softwareId}`;
-      return localStorage.getItem(key) || undefined;
+    const data = await cache.get(`license_${softwareId}`);
+    if (data?.isValid && typeof data.reason === "string") {
+      return data.reason;
     }
-
     return undefined;
   } catch (error) {
     console.error("Error getting cached license key:", error);
@@ -81,18 +94,16 @@ export function getCachedLicenseKey(softwareId: string): string | undefined {
  * @param softwareId - The software ID to cache the license key for
  * @param licenseKey - The license key to cache
  */
-export function cacheLicenseKey(softwareId: string, licenseKey: string): void {
+export async function cacheLicenseKey(
+  softwareId: string,
+  licenseKey: string
+): Promise<void> {
   try {
-    // Try to store the license key in localStorage in browser environments
-    if (typeof localStorage !== "undefined") {
-      const key = `codecheckout_license_${softwareId}`;
-      localStorage.setItem(key, licenseKey);
-      return;
-    }
-
-    console.log(
-      `Caching license key ${licenseKey} for software ID ${softwareId}`
-    );
+    await cache.set(`license_${softwareId}`, {
+      isValid: true,
+      reason: licenseKey,
+      timestamp: Date.now(),
+    });
   } catch (error) {
     console.error("Error caching license key:", error);
   }

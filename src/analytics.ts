@@ -1,7 +1,7 @@
 import { AnalyticsEventParams, AnalyticsEventResponse } from "./types";
 import { createApiClient } from "./api";
 import {
-  generateMachineId,
+  getMachineId,
   generateSessionId,
   getCurrentTimestamp,
   getCachedLicenseKey,
@@ -27,12 +27,13 @@ export async function logAnalyticsEvent(
     }
 
     // Fill in optional parameters with defaults if not provided
-    const machineId = params.machineId || generateMachineId() || undefined;
+    const machineId = params.machineId || (await getMachineId()) || undefined;
     const sessionId = params.sessionId || generateSessionId() || undefined;
     const timestamp = params.timestamp || getCurrentTimestamp();
 
     // Try to get a cached license key if one isn't provided
-    const licenseKey = params.licenseKey || getCachedLicenseKey(softwareId);
+    const licenseKey =
+      params.licenseKey || (await getCachedLicenseKey(softwareId));
 
     // Create API client
     const apiClient = createApiClient();
