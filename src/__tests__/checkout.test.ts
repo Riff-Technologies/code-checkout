@@ -1,6 +1,5 @@
 import { generateCheckoutUrl } from "../checkout";
 import { createApiClient } from "../api";
-import { DEFAULT_CONFIG } from "../constants";
 
 // Mock the license key generation to make tests deterministic
 jest.mock("../utils", () => ({
