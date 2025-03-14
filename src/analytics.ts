@@ -8,7 +8,7 @@ import {
 } from "./utils";
 
 /**
- * Log an analytics event to the CodeCheckout API
+ * Log an analytics event to the code-checkout API
  * @param params - Parameters for the analytics event
  * @returns A promise that resolves to the response from the API
  */

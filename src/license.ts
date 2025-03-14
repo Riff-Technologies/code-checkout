@@ -16,7 +16,7 @@ const DEFAULT_CACHE_DURATION = 24;
 const cacheStorage = createCacheStorage();
 
 /**
- * Validate a license key with the CodeCheckout API
+ * Validate a license key with the code-checkout API
  * @param params - Parameters for license validation
  * @returns A promise that resolves to the validation response
  */
@@ -108,7 +108,7 @@ export async function validateLicense(
 }
 
 /**
- * Perform online validation with the CodeCheckout API
+ * Perform online validation with the code-checkout API
  * @param params - Parameters for license validation
  * @param cacheKey - Cache key for storing the result
  * @param softwareId - Software ID for the validation

@@ -2,7 +2,7 @@
  * Configuration options for the CodeCheckout package
  */
 export interface CodeCheckoutConfig {
-  /** Base URL for the CodeCheckout API */
+  /** Base URL for the code-checkout API */
   baseUrl: string;
   /** Default success URL for checkout redirects */
   defaultSuccessUrl: string;
@@ -16,7 +16,7 @@ export interface CodeCheckoutConfig {
 export interface AnalyticsEventParams {
   /** Identifier for the command or action being tracked */
   commandId: string;
-  /** Unique identifier for the software using CodeCheckout */
+  /** Unique identifier for the software using code-checkout */
   softwareId: string;
   /** License key associated with the software */
   licenseKey?: string;
@@ -42,7 +42,7 @@ export interface AnalyticsEventResponse {
  * Parameters for validating a license
  */
 export interface ValidateLicenseParams {
-  /** Unique identifier for the software using CodeCheckout */
+  /** Unique identifier for the software using code-checkout */
   softwareId: string;
   /** License key to validate */
   licenseKey?: string;
@@ -72,7 +72,7 @@ export interface ValidateLicenseResponse {
  * Parameters for generating a checkout URL
  */
 export interface GenerateCheckoutUrlParams {
-  /** Unique identifier for the software using CodeCheckout */
+  /** Unique identifier for the software using code-checkout */
   softwareId: string;
   /** URL to redirect to after successful checkout */
   successUrl?: string;

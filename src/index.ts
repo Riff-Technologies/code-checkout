@@ -1,5 +1,5 @@
 /**
- * CodeCheckout - License and payment management for software
+ * code-checkout - License and payment management for software
  * @packageDocumentation
  */
 

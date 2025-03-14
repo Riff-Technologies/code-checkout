@@ -7,7 +7,7 @@ import { createApiClient } from "./api";
 import { DEFAULT_CONFIG } from "./constants";
 
 /**
- * Generate a checkout URL for the CodeCheckout platform
+ * Generate a checkout URL for the code-checkout platform
  * @param params - Parameters for generating the checkout URL
  * @returns The generated license key and checkout URL
  */

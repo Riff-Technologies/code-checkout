@@ -77,11 +77,11 @@ export class ApiClient {
   private handleApiError(error: unknown): void {
     if (axios.isAxiosError(error)) {
       console.error(
-        `CodeCheckout API Error: ${error.response?.status} ${error.response?.statusText}`,
+        `code-checkout API Error: ${error.response?.status} ${error.response?.statusText}`,
         error.response?.data
       );
     } else {
-      console.error("CodeCheckout API Error:", error);
+      console.error("code-checkout API Error:", error);
     }
   }
 }
