@@ -16,7 +16,7 @@ const DEFAULT_CACHE_DURATION = 24;
 const cacheStorage = createCacheStorage();
 
 /**
- * Validate a license key with the code-checkout API
+ * Validate a license key with the code-checkout API, or use a cached value if available, and refresh the cache in the background
  * @param params - Parameters for license validation
  * @returns A promise that resolves to the validation response
  */
