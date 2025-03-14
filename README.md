@@ -16,6 +16,10 @@
 
 ## 🚀 Quick Start
 
+### Prerequisites
+
+Create a [code-checkout account](https://riff-tech.com/sign-up) and create a Software Product. You'll need the `softwareId` that you added to integrate with the code-checkout platform.
+
 ### Installation
 
 ```bash
@@ -24,9 +28,13 @@ npm install @riff-tech/code-checkout
 
 ## 📖 Usage Guide
 
-### Analytics Tracking
+> Note: we recommend storing your `softwareId` in an environment variable.
 
-Track user actions and commands with ease:
+### Command Analytics Tracking
+
+> Note: Analytics are intended to track the usage of your features, not as a replacement for your user-behavior analytics
+
+Track which commands your users are executing with ease:
 
 ```typescript
 import { logAnalyticsEvent } from "@riff-tech/code-checkout";
@@ -81,22 +89,21 @@ Create customized checkout experiences for your users:
 import { generateCheckoutUrl } from "@riff-tech/code-checkout";
 
 const appDisplayName = "Example App";
-const appUri = "vscode://"; // Optional, but this enables a button that can redirect back to your app
-const successUrl = "https://mysite.com"; // Optional, but can be used to show your website after purchase
+const successUrl = "https://mysite.com";
 
 const licenseKeyToActivate = generateLicenseKey(); // Optionally generate a license key and pass it to `generateCheckoutUrl` for activation after checkout success
 
 // Generate a checkout URL and get the licenseKey that will be activated
 const { licenseKey, url } = generateCheckoutUrl({
   softwareId: "your-software-id",
-  successUrl: `https://codecheckout.dev/activate?key={licenseKey}`, // Optional. Default is a page where the license and app name are shown. The query params are automatically attached to the default or custom `successUrl`
-  cancelUrl: "https://riff-tech.com/codecheckout", // Optional. Default is shown.
-  name: appDisplayName, // Optional. If provided, it will be attached as a query param to the `successUrl`
-  redirectUri: successUrl, // Optional. If provided, it will be attached as a query param to the `successUrl`
-  testMode: false, // Optional. Creates a test checkout session where no charges are incurred
+  successUrl: `https://codecheckout.dev/activate?key={licenseKey}`,
+  cancelUrl: "https://riff-tech.com/codecheckout",
+  name: appDisplayName,
+  redirectUri: successUrl,
+  testMode: false,
 });
 
-console.log("checkoutUrl: ", url);
+// By default, your users will be redirected after checkout to a license page, like this:
 // http://riff-tech.com/activate?key=YOUR-LICENSE-KEY-HERE&name=Your%20Software%20Name&redirectUri=https://your-app.com
 
 // Redirect the user to the checkout URL
@@ -127,7 +134,7 @@ validateLicense({
   licenseKey?: string;
   machineId?: string;
   sessionId?: string;
-  environment?: object;
+  environment?: object; // Information about the user's environment, e.g. IDE, version, etc.
   forceOnlineValidation?: boolean;
   cacheDurationInHours?: number;
 }): Promise<{ isValid: boolean, reason?: string }>;
