@@ -1,14 +1,15 @@
 {
   "name": "code-checkout-examples",
   "version": "1.0.0",
-  "description": "Example applications for the CodeCheckout package",
+  "description": "Example applications for the code-checkout package",
   "scripts": {
-    "start:server": "ts-node ./node-server/server-usage.ts",
-    "start:browser": "cd .. && npm install && npm run build && cd examples/browser-app && npm install && npx vite",
-    "start:ts-program": "ts-node ./ts-program/basic-usage.ts",
+    "start:server": "NODE_ENV=development ts-node ./node-server/server-usage.ts",
+    "start:browser": "NODE_ENV=development npx vite ./browser-app",
+    "start:ts-program": "NODE_ENV=development ts-node ./ts-program/basic-usage.ts",
     "build": "tsc"
   },
   "dependencies": {
+    "@riff-tech/code-checkout": "^2.0.0",
     "express": "^4.18.2"
   },
   "devDependencies": {

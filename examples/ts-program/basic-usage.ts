@@ -1,12 +1,12 @@
 /**
- * Basic usage example for the CodeCheckout package
+ * Basic usage example for the code-checkout package
  */
 import {
   logAnalyticsEvent,
   validateLicense,
   generateCheckoutUrl,
   generateLicenseKey,
-} from "../../src";
+} from "@riff-tech/code-checkout";
 
 /**
  * Example of tracking an analytics event
@@ -57,15 +57,11 @@ async function checkLicense(): Promise<void> {
 async function createCheckoutLink(): Promise<void> {
   try {
     const licenseKey = generateLicenseKey();
-    const successUrl = "https://example.com/success";
-    const cancelUrl = "https://example.com/cancel";
 
     const { url } = await generateCheckoutUrl({
       softwareId: "riff-tech.testmystuff",
       testMode: true, // Uses a test checkout endpoint where no charges are processed
       licenseKey,
-      successUrl,
-      cancelUrl,
     });
 
     console.log("Generated license key:", licenseKey);
@@ -80,7 +76,7 @@ async function createCheckoutLink(): Promise<void> {
 
 // Run the examples
 (async (): Promise<void> => {
-  console.log("Running CodeCheckout examples...");
+  console.log("Running code-checkout examples...");
 
   // Uncomment these lines to run the examples
   trackAnalyticsEvent();

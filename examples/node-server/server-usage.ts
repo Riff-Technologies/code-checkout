@@ -1,5 +1,5 @@
 /**
- * Server usage example for the CodeCheckout package
+ * Server usage example for the code-checkout package
  * This example demonstrates how to use the package in a Node.js server environment
  */
 import express from "express";
@@ -8,7 +8,7 @@ import {
   validateLicense,
   generateCheckoutUrl,
   generateLicenseKey,
-} from "../../src";
+} from "@riff-tech/code-checkout";
 
 // Define types for our API responses
 type ApiResponse<T> = {
@@ -99,10 +99,7 @@ class ServerLicenseManager {
           softwareId: this.softwareId,
           testMode: true,
           licenseKey,
-          successUrl: `${req.protocol}://${req.get(
-            "host"
-          )}/activate?key=${licenseKey}`,
-          cancelUrl: `${req.protocol}://${req.get("host")}/cancel`,
+          name: "Example Software",
         });
 
         // Log the checkout attempt

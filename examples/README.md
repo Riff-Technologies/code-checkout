@@ -1,11 +1,11 @@
-# CodeCheckout Examples
+# code-checkout Examples
 
-This directory contains example applications demonstrating how to use the CodeCheckout package in both browser and server environments.
+This directory contains example applications demonstrating how to use the code-checkout package in both browser and server environments.
 
 ## Structure
 
-- `browser-usage.ts` - Example of using CodeCheckout in a browser environment
-- `server-usage.ts` - Example of using CodeCheckout in a Node.js server environment
+- `browser-usage.ts` - Example of using code-checkout in a browser environment
+- `server-usage.ts` - Example of using code-checkout in a Node.js server environment
 - `basic-usage.ts` - Basic usage examples of the package's core functionality
 
 ## Prerequisites
@@ -19,8 +19,6 @@ This directory contains example applications demonstrating how to use the CodeCh
 
 ```bash
 npm install
-# or
-yarn install
 ```
 
 2. Configure your environment:
@@ -101,5 +99,5 @@ curl -X POST http://localhost:3000/api/create-checkout
 
 ## Additional Resources
 
-- [CodeCheckout Documentation](https://www.riff-tech.com/docs/guides)
+- [code-checkout Documentation](https://www.riff-tech.com/docs/guides)
 - [Support](mailto:shawn@riff-tech.com)

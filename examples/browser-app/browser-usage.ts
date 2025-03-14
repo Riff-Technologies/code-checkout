@@ -1,5 +1,5 @@
 /**
- * Browser usage example for the CodeCheckout package
+ * Browser usage example for the code-checkout package
  * This example demonstrates how to use the package in a client-side web application
  */
 import {
@@ -7,7 +7,7 @@ import {
   validateLicense,
   generateCheckoutUrl,
   generateLicenseKey,
-} from "code-checkout";
+} from "@riff-tech/code-checkout";
 
 // Define types for our example
 type LicenseStatus = {
@@ -43,6 +43,10 @@ class BrowserLicenseManager {
    */
   private async validateStoredLicense(): Promise<void> {
     try {
+      this.licenseStatus = {
+        isValid: false,
+        message: "Validating license...",
+      };
       const result = await validateLicense({
         softwareId: this.softwareId,
         licenseKey: this.licenseKey as string,
@@ -83,8 +87,8 @@ class BrowserLicenseManager {
         softwareId: this.softwareId,
         testMode: true,
         licenseKey,
-        name: "My Software",
-        redirectUri: "https://www.google.com",
+        name: "Example Software",
+        cancelUrl: window.location.href,
       });
 
       // Log the checkout attempt
